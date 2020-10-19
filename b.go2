@@ -1,0 +1,15 @@
+package main
+
+import "fmt"
+
+func Stringify[T any](s []T) (ret []string) {
+	for _, v := range s {
+		ret = append(ret, v.String()) // INVALID
+	}
+	return ret
+}
+
+func main() {
+	Print([]string{"Hello, ", "playground\n"})
+}
+
