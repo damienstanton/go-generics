@@ -1,0 +1,40 @@
+// MyInt has a String method.
+type MyInt int
+
+func (i MyInt) String() string {
+	return strconv.Itoa(int(i))
+}
+
+// MyFloat also has a String method.
+type MyFloat float64
+
+func (f MyFloat) String() string {
+	return strconv.FormatFloat(float64(f), 'g', -1, 64)
+}
+
+// MyIntOrFloat is a type constraint that accepts MyInt or MyFloat.
+type MyIntOrFloat interface {
+	type MyInt, MyFloat
+}
+
+// ToString converts a value to a string.
+// This function is INVALID.
+func ToString[T MyIntOrFloat](v T) string {
+	return v.String() // INVALID
+}
+
+// MyIntOrFloatStringer accepts MyInt or MyFloat, and defines a String
+// method. Note that both MyInt and MyFloat have a String method.
+// If either did not have a String method, they would not satisfy the
+// constraint even though the type list lists them. To satisfy a
+// constraint a type must both match the type list (if any) and
+// implement all the methods (if any).
+type MyIntOrFloatStringer interface {
+	type MyInt, MyFloat
+	String() string
+}
+
+// ToString2 convers a value to a string.
+func ToString2[T MyIntOrFloatStringer](v T) string {
+	return v.String()
+}

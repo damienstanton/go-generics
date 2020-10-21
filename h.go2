@@ -1,0 +1,54 @@
+// This function is INVALID.
+func Smallest[T any](s []T) T {
+	r := s[0] // panic if slice is empty
+	for _, v := range s[1:] {
+		if v < r { // INVALID
+			r = v
+		}
+	}
+	return r
+}
+
+// Type lists provide constraints, and a package `constraints`
+// may be added to the standard library
+
+// SignedInteger is a type constraint that permits any
+// signed integer type.
+type SignedInteger interface {
+	type int, int8, int16, int32, int64
+}
+
+// Ordered is a type constraint that matches any ordered type.
+// An ordered type is one that supports the <, <=, >, and >= operators.
+type Ordered interface {
+	type int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64, uintptr,
+		float32, float64,
+		string
+}
+
+// Now, Smallest can be written
+// Smallest returns the smallest element in a slice.
+// It panics if the slice is empty.
+func Smallest[T constraints.Ordered](s []T) T {
+	r := s[0] // panics if slice is empty
+	for _, v := range s[1:] {
+		if v < r {
+			r = v
+		}
+	}
+	return r
+}
+
+// Type inference
+/*
+
+For example, if T1 and T2 are type parameters
+[]map[int]bool can be unified with any of the following:
+
+[]map[int]bool
+T1 (T1 matches []map[int]bool)
+[]T1 (T1 matches map[int]bool)
+[]map[T1]T2 (T1 matches int, T2 matches bool)
+
+*/

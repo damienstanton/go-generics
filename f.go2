@@ -1,0 +1,8 @@
+// Vector is a name for a slice of any element type.
+type Vector[T any] []T
+
+// instantiation of the above
+var v Vector[int]
+
+// Push adds a value to the end of a vector.
+func (v *Vector[T]) Push(x T) { *v = append(*v, x) }

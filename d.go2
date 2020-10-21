@@ -1,0 +1,11 @@
+// Print prints the elements of any slice.
+// Print has a type parameter T and has a single (non-type)
+// parameter s which is a slice of that type parameter.
+func Print[T interface{}](s []T) {
+	// ...
+}
+
+// Proposed sugar to avoid having to type `interface{}` everywhere
+func Print[T any](s []T) {
+	// ...
+}

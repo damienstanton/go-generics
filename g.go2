@@ -1,0 +1,27 @@
+// List is a linked list of values of type T.
+type List[T any] struct {
+	next *List[T] // this reference to List[T] is OK
+	val  T
+}
+
+// This type is INVALID.
+type P[T1, T2 any] struct {
+	F *P[T2, T1] // INVALID; must be [T1, T2]
+}
+
+// ListHead is the head of a linked list.
+type ListHead[T any] struct {
+	head *ListElement[T]
+}
+
+// ListElement is an element in a linked list with a head.
+// Each element points back to the head.
+type ListElement[T any] struct {
+	next *ListElement[T]
+	val  T
+	// Using ListHead[T] here is OK.
+	// ListHead[T] refers to ListElement[T] refers to ListHead[T].
+	// Using ListHead[int] would not be OK, as ListHead[T]
+	// would have an indirect reference to ListHead[int].
+	head *ListHead[T]
+}

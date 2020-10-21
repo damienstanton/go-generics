@@ -1,0 +1,38 @@
+// Double returns a new slice that contains all the elements of s, doubled.
+func Double[E constraints.Number](s []E) []E {
+	r := make([]E, len(s))
+	for i, v := range s {
+		r[i] = v + v
+	}
+	return r
+}
+
+// MySlice is a slice of ints.
+type MySlice []int
+
+// The type of V1 will be []int, not MySlice.
+// Here we are using function argument type inference,
+// but not constraint type inference.
+var V1 = Double(MySlice{1})
+
+// SC constraints a type to be a slice of some type E.
+type SC[E any] interface {
+	type []E
+}
+
+// DoubleDefined returns a new slice that contains the elements of s,
+// doubled, and also has the same type as s.
+func DoubleDefined[S SC[E], E constraints.Number](s S) S {
+	// Note that here we pass S to make, where above we passed []E.
+	r := make(S, len(s))
+	for i, v := range s {
+		r[i] = v + v
+	}
+	return r
+}
+
+// The type of V2 will be MySlice.
+var V2 = DoubleDefined[MySlice, int](MySlice{1})
+
+// The type of V3 will be MySlice.
+var V3 = DoubleDefined(MySlice{1})

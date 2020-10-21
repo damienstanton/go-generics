@@ -1,0 +1,86 @@
+// Setter is a type constraint that requires that the type
+// implement a Set method that sets the value from a string.
+type Setter interface {
+	Set(string)
+}
+
+// FromStrings takes a slice of strings and returns a slice of T,
+// calling the Set method to set each returned value.
+//
+// Note that because T is only used for a result parameter,
+// function argument type inference does not work when calling
+// this function.
+func FromStrings[T Setter](s []string) []T {
+	result := make([]T, len(s))
+	for i, v := range s {
+		result[i].Set(v)
+	}
+	return result
+}
+
+// Settable is an integer type that can be set from a string.
+type Settable int
+
+// Set sets the value of *p from a string.
+func (p *Settable) Set(s string) {
+	i, _ := strconv.Atoi(s) // real code should not ignore the error
+	*p = Settable(i)
+}
+
+func F() {
+	// INVALID
+	nums := FromStrings[Settable]([]string{"1", "2"})
+	// Here we want nums to be []Settable{1, 2}.
+	...
+}
+
+// Setter2 is a type constraint that requires that the type
+// implement a Set method that sets the value from a string,
+// and also requires that the type be a pointer to its type parameter.
+type Setter2[B any] interface {
+	Set(string)
+	type *B
+}
+
+// FromStrings2 takes a slice of strings and returns a slice of T,
+// calling the Set method to set each returned value.
+//
+// We use two different type parameters so that we can return
+// a slice of type T but call methods on *T aka PT.
+// The Setter2 constraint ensures that PT is a pointer to T.
+func FromStrings2[T any, PT Setter2[T]](s []string) []T {
+	result := make([]T, len(s))
+	for i, v := range s {
+		// The type of &result[i] is *T which is in the type list
+		// of Setter2, so we can convert it to PT.
+		p := PT(&result[i])
+		// PT has a Set method.
+		p.Set(v)
+	}
+	return result
+}
+
+func F2() {
+	// FromStrings2 takes two type parameters.
+	// The second parameter must be a pointer to the first.
+	// Settable is as above.
+	nums := FromStrings2[Settable, *Settable]([]string{"1", "2"})
+	// Now nums is []Settable{1, 2}.
+	...
+}
+
+func F3() {
+	// Here we just pass one type argument.
+	nums := FromStrings2[Settable]([]string{"1", "2"})
+	// Now nums is []Settable{1, 2}.
+	...
+}
+
+// Unsettable is a type that does not have a Set method.
+type Unsettable int
+
+func F4() {
+	// This call is INVALID.
+	nums := FromString2[Unsettable]([]string{"1", "2"})
+	...
+}
