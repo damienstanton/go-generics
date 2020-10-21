@@ -1,3 +1,5 @@
+package main
+
 // This function is INVALID.
 func Smallest[T any](s []T) T {
 	r := s[0] // panic if slice is empty
@@ -21,10 +23,15 @@ type SignedInteger interface {
 // Ordered is a type constraint that matches any ordered type.
 // An ordered type is one that supports the <, <=, >, and >= operators.
 type Ordered interface {
-	type int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64, uintptr,
+	type int, int8, int16, int32, int64, uint,
+		uint8, uint16, uint32, uint64, uintptr,
 		float32, float64,
 		string
+}
+
+func main() {
+	xs := []uint{1,2,3,4,5}
+	Smallest(xs)
 }
 
 // Now, Smallest can be written
@@ -40,15 +47,3 @@ func Smallest[T constraints.Ordered](s []T) T {
 	return r
 }
 
-// Type inference
-/*
-
-For example, if T1 and T2 are type parameters
-[]map[int]bool can be unified with any of the following:
-
-[]map[int]bool
-T1 (T1 matches []map[int]bool)
-[]T1 (T1 matches map[int]bool)
-[]map[T1]T2 (T1 matches int, T2 matches bool)
-
-*/
