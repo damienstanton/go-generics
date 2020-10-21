@@ -54,11 +54,14 @@ Rust supports type parameters on methods, which this design does not.
 
 - [The wikipedia entry on generics (actually quite good)][3]
 - [The full Go generics draft design document by Ian Lance Taylor and Robert Griesemer][1]
-- [The `go2go` playground][2]
+- [The `go2go` playground online][2]
+- Installing the `go2go` branch on your local machine: Follow the steps listed [here][4], but checkout the branch `dev.go2go`
+
 
 [1]: https://go.googlesource.com/proposal/+/refs/heads/master/design/go2draft-type-parameters.md
 [2]: https://go2goplay.golang.org/
 [3]: https://en.wikipedia.org/wiki/Generic_programming
+[4]: https://golang.org/doc/install/source
 
 © 2020 Damien Stanton
 
