@@ -1,3 +1,8 @@
+# NOTE
+
+This repo is from an older talk, which has been replaced with [this one.](https://github.com/damienstanton/generic-go)
+
+
 # What is the point?
 
 Certain classess of algorithms and data structures are simpler to write and reason about when the types are _parameterized_, and the concrete implementation is left up to the compiler. These include:
